@@ -39,9 +39,23 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-
+function Person(name, age) {
+  this.name = name,
+  this.age = age,
+  this.stomach = []
 }
+Person.prototype.eat = function(food){
+  if (this.stomach.length < 10){
+  this.stomach.push(food);
+  }
+}
+Person.prototype.poop = function(){
+  this.stomach = [];
+}
+Person.prototype.toString = function(){
+  return this.name + ', ' + this.age;
+}
+
 
 /*
   TASK 2
@@ -57,9 +71,31 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-
+function Car(model, milesPerGallon) {
+  this.model = model,
+  this.milesPerGallon = milesPerGallon
+  this.tank = 0,
+  this.odometer = 0
 }
+Car.prototype.fill = function(gallons){
+  this.tank = this.tank+gallons;
+  return;
+}
+Car.prototype.drive = function(distance){
+    if ((this.tank*this.milesPerGallon)-distance > 0){
+      this.tank = this.tank - (distance / this.milesPerGallon);
+      this.odometer = this.odometer + distance;
+      return;
+    }//if
+    else if ((this.tank*this.milesPerGallon) - distance <= 0){
+      let distLeft = distance - (this.tank*this.milesPerGallon);
+      let actualDist = distance - distLeft
+      this.odometer = this.odometer + actualDist;
+      this.tank=0
+      return `I ran out of fuel at ${this.odometer} miles!`
+     
+    }//else if
+  }//drive
 
 /*
   TASK 3
@@ -68,18 +104,24 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
-
+function Baby(name, age, favoriteToy) {
+  Person.call(this, name, age);
+  this.favoriteToy = favoriteToy;
 }
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function(){
+  return `Playing with ${this.favoriteToy}`
+}
+
 
 /* 
   TASK 4
 
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. Implicit-binding: Most common rule, only applies to objects with methods
+  2. explicit-binding: lets us tell 'this' where its looking at {call, bind, apply}
+  3. New-binding: using the keyword 'new' lets you make a new object, and makes 'this' point to it.
+  4. Window-binding: if no other rules apply, 'this' applies to the window unless in restricted mode.
 */
 
 
